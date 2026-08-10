@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEBIAS AI PROTOCOL | Dự Án Khoa Học Kỹ Thuật (KHKT)</title>
+  <meta name="description" content="Hệ thống Hỗ trợ Ra quyết định & Định hướng Nghề nghiệp Giảm thiểu Định kiến Tư duy cho Học sinh THCS/THPT - Dự án KHKT">
+  
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Main Design System CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- NAVIGATION HEADER -->
+  <nav class="navbar">
+    <div class="container nav-content">
+      <a href="#" class="logo">
+        <span class="logo-badge">KHKT 2026</span>
+        <span>DEBIAS <span class="gradient-text">PROTOCOL</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#overview" class="active"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+        <li><a href="#architecture"><i class="fa-solid fa-sitemap"></i> Kiến trúc Hệ thống</a></li>
+        <li><a href="#debias-app"><i class="fa-solid fa-brain"></i> Ứng dụng Debias UI</a></li>
+        <li><a href="#jury-sandbox"><i class="fa-solid fa-award"></i> Thử nghiệm BGK</a></li>
+        <li><a href="#database-sec"><i class="fa-solid fa-database"></i> Kho Dữ liệu CSDL</a></li>
+      </ul>
+      <div>
+        <a href="#debias-app" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> Thử nghiệm Ngay</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <header id="overview" class="hero">
+    <div class="container">
+      <div class="hero-tag">
+        <i class="fa-solid fa-atom"></i> Đề tài Khoa học Kỹ thuật (KHKT) Lĩnh vực Phần mềm Hệ thống & Tâm lý học
+      </div>
+      <h1 class="hero-title">
+        Hệ Thống Hỗ Trợ Ra Quyết Định <br>
+        <span class="gradient-text">Giảm Thể Định Kiến Tư Duy (Debias AI Protocol)</span>
+      </h1>
+      <p class="hero-subtitle">
+        Ứng dụng lý thuyết Tâm lý học Nhận thức kết hợp Thuật toán Phản biện & Kiểm chứng Số nhằm nâng cao năng lực định hướng nghề nghiệp khách quan cho học sinh THCS/THPT.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#debias-app" class="btn btn-primary"><i class="fa-solid fa-play"></i> Bắt đầu Trải nghiệm 4 Bước</a>
+        <a href="#jury-sandbox" class="btn btn-accent"><i class="fa-solid fa-user-check"></i> Chế độ Thử nhanh BGK (1-Click)</a>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="hero-stats">
+        <div class="glass-card stat-card">
+          <div class="stat-number">4</div>
+          <div class="stat-label">Module Giảm Định kiến Cốt lõi</div>
+        </div>
+        <div class="glass-card stat-card">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Kiểm chứng Số liệu Lao động Thực tế</div>
+        </div>
+        <div class="glass-card stat-card">
+          <div class="stat-number">0.3s</div>
+          <div class="stat-label">Tốc độ Phân tích Ma trận 4 Ô</div>
+        </div>
+        <div class="glass-card stat-card">
+          <div class="stat-number">Top 1</div>
+          <div class="stat-label">Mô hình Phản biện Chống Bẫy Tâm lý</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SECTION 1: INTERACTIVE ARCHITECTURE visualizer (SƠ ĐỒ KIẾN TRÚC HỆ THỐNG 4 TẦNG) -->
+  <section id="architecture" style="background: rgba(15, 23, 42, 0.5);">
+    <div class="container">
+      <div class="text-center mb-8">
+        <div class="hero-tag"><i class="fa-solid fa-layer-group"></i> Sơ đồ Cấu trúc Dự án KHKT</div>
+        <h2>Kiến Trúc Hệ Thống <span class="gradient-text-blue">4 Tầng Xử Lý</span></h2>
+        <p style="color: var(--text-muted); max-width: 700px; margin: 0.5rem auto 0 auto;">
+          Mô hình hóa toàn bộ chuỗi xử lý dữ liệu từ Giao diện Học sinh (Frontend) tới Bảo mật Middleware, Tầng Nghiệp vụ Backend API và Cơ sở dữ liệu CSDL.
+        </p>
+      </div>
+
+      <!-- 4 Layers Architecture Display -->
+      <div class="arch-grid">
+        <!-- Layer 1: Frontend -->
+        <div class="arch-layer layer-frontend">
+          <div class="arch-layer-header"><i class="fa-solid fa-desktop"></i> 🌐 Tầng Giao diện (Frontend)</div>
+          <div class="arch-node" data-node-key="debias-ui">
+            <div class="arch-node-title"><i class="fa-solid fa-window-maximize"></i> Giao diện Học sinh (Debias UI)</div>
+            <div class="arch-node-desc">Giao diện tương tác trực quan cho học sinh & BGK</div>
+          </div>
+        </div>
+
+        <!-- Layer 2: Auth & Middleware -->
+        <div class="arch-layer layer-auth">
+          <div class="arch-layer-header"><i class="fa-solid fa-shield-halved"></i> 🛡️ Tầng Bảo mật & Middleware</div>
+          <div class="arch-node" data-node-key="auth-guard">
+            <div class="arch-node-title"><i class="fa-solid fa-lock"></i> API Gateway & Auth Guard</div>
+            <div class="arch-node-desc">Xác thực tài khoản học sinh & giám khảo</div>
+          </div>
+        </div>
+
+        <!-- Layer 3: Backend Business Logic API -->
+        <div class="arch-layer layer-backend">
+          <div class="arch-layer-header"><i class="fa-solid fa-gears"></i> ⚙️ Tầng Nghiệp vụ (Backend API)</div>
+          <div class="arch-node" data-node-key="debias-orchestrator">
+            <div class="arch-node-title"><i class="fa-solid fa-brain"></i> Debias Protocol Orchestrator</div>
+            <div class="arch-node-desc">Điều phối quy trình 4 bước</div>
+          </div>
+          <div class="arch-node" data-node-key="devils-advocate">
+            <div class="arch-node-title"><i class="fa-solid fa-scale-unbalanced"></i> Module Người phản biện</div>
+            <div class="arch-node-desc">Chống Confirmation Bias</div>
+          </div>
+          <div class="arch-node" data-node-key="cross-checker">
+            <div class="arch-node-title"><i class="fa-solid fa-chart-pie"></i> Module Kiểm chứng Số</div>
+            <div class="arch-node-desc">Chống Availability Bias</div>
+          </div>
+          <div class="arch-node" data-node-key="matrix-4quad">
+            <div class="arch-node-title"><i class="fa-solid fa-table-cells-large"></i> Module Ma trận Phân tư 4 Ô</div>
+            <div class="arch-node-desc">Chống Bandwagon Effect</div>
+          </div>
+          <div class="arch-node" data-node-key="sunk-cost">
+            <div class="arch-node-title"><i class="fa-solid fa-calculator"></i> Module Thuật toán Chi phí chìm</div>
+            <div class="arch-node-desc">Phân tích Chi phí cơ hội</div>
+          </div>
+          <div class="arch-node" data-node-key="market-service">
+            <div class="arch-node-title"><i class="fa-solid fa-magnifying-glass-chart"></i> Market Data Integration</div>
+            <div class="arch-node-desc">Tra cứu & đối chiếu thị trường</div>
+          </div>
+        </div>
+
+        <!-- Layer 4: Database -->
+        <div class="arch-layer layer-db">
+          <div class="arch-layer-header"><i class="fa-solid fa-database"></i> 🗄️ Tầng Cơ sở dữ liệu (Database)</div>
+          <div class="arch-node" data-node-key="user-db">
+            <div class="arch-node-title"><i class="fa-solid fa-users"></i> User & Session DB</div>
+            <div class="arch-node-desc">Lưu trữ hồ sơ học sinh</div>
+          </div>
+          <div class="arch-node" data-node-key="market-db">
+            <div class="arch-node-title"><i class="fa-solid fa-server"></i> Labor Market Repository</div>
+            <div class="arch-node-desc">Kho dữ liệu tuyển dụng</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Node Detail Description Box -->
+      <div id="arch-details-content" style="margin-top: 1.5rem;">
+        <div style="padding: 1rem; background: rgba(30, 41, 59, 0.4); border: 1px dashed rgba(255, 255, 255, 0.15); border-radius: 8px; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+          💡 <em>Nhấp chuột vào bất kỳ thành phần nào trong Sơ đồ Kiến trúc trên để xem chức năng chi tiết trong thuật toán.</em>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: CORE DEBIAS INTERACTIVE APPLICATION (BỘ ỨNG DỤNG TƯƠNG TÁC 4 BƯỚC) -->
+  <section id="debias-app">
+    <div class="container">
+      <div class="text-center mb-8">
+        <div class="hero-tag"><i class="fa-solid fa-microchip"></i> Sản phẩm Ứng dụng Thực nghiệm</div>
+        <h2>Trải Nghiệm Quy Trình <span class="gradient-text">Debias AI Protocol</span></h2>
+        <p style="color: var(--text-muted); max-width: 700px; margin: 0.5rem auto 0 auto;">
+          Học sinh nhập dự định ngành học -> Hệ thống áp dụng 4 Module phản biện -> Xuất Báo cáo Chỉ số Định kiến Tư duy.
+        </p>
+      </div>
+
+      <div class="wizard-container">
+        <!-- Wizard Progress Bar Header -->
+        <div class="wizard-steps">
+          <div class="wizard-progress-bar"></div>
+          
+          <div class="step-item active" onclick="goToStep(1)">
+            <div class="step-circle">1</div>
+            <div class="step-label">Dự định Ngành học</div>
+          </div>
+          
+          <div class="step-item" onclick="goToStep(2)">
+            <div class="step-circle">2</div>
+            <div class="step-label">Devil's Advocate</div>
+          </div>
+          
+          <div class="step-item" onclick="goToStep(3)">
+            <div class="step-circle">3</div>
+            <div class="step-label">Cross-Checker & 4 Ô</div>
+          </div>
+          
+          <div class="step-item" onclick="goToStep(4)">
+            <div class="step-circle">4</div>
+            <div class="step-label">Báo cáo Scorecard</div>
+          </div>
+        </div>
+
+        <!-- STEP 1: NHẬP DỰ ĐỊNH NGÀNH HỌC -->
+        <div class="step-pane active" id="pane-step-1">
+          <h3 style="color: #38bdf8; margin-bottom: 1rem;"><i class="fa-solid fa-bullseye"></i> Bước 1: Khai báo Nguyện vọng & Nhận thức Ban đầu</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+            Hãy chọn ngành học bạn đang định hướng và chia sẻ góc nhìn ban đầu để hệ thống bắt đầu quy trình Debias.
+          </p>
+
+          <div class="form-group">
+            <label class="form-label" for="career-select">Lựa chọn Ngành nghề mong muốn:</label>
+            <select id="career-select" class="form-control">
+              <option value="">-- Chọn ngành học mong muốn --</option>
+              <option value="it_software" selected>Công nghệ thông tin & Phần mềm (IT Software)</option>
+              <option value="medicine_pharmacy">Y khoa & Dược học (Medicine & Pharmacy)</option>
+              <option value="business_marketing">Quản trị Kinh doanh & Marketing</option>
+              <option value="finance_banking">Tài chính & Ngân hàng</option>
+              <option value="graphic_design">Thiết kế Đồ họa & Truyền thông đa phương tiện</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="user-reasoning">Lý do chính khiến bạn muốn chọn ngành này:</label>
+            <textarea id="user-reasoning" class="form-control" rows="3" placeholder="VD: Em thấy ngành này hot trên mạng, lương cao 50 triệu và bạn bè đăng ký học rất nhiều..."></textarea>
+          </div>
+
+          <div class="flex-between mt-8">
+            <div></div>
+            <button class="btn btn-primary" onclick="goToStep(2)">
+              Tiếp tục đến Bước 2: Phản biện <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 2: MODULE DEVIL'S ADVOCATE (CHỐNG CONFIRMATION BIAS) -->
+        <div class="step-pane" id="pane-step-2">
+          <h3 style="color: #fbbf24; margin-bottom: 1rem;"><i class="fa-solid fa-scale-unbalanced"></i> Bước 2: Module Người Phản Biện (Devil's Advocate)</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+            Chống <strong>Định kiến Xác nhận (Confirmation Bias)</strong>: Hệ thống đưa ra các câu hỏi góc khuất & thử thách tư duy mà bạn có thể đã bỏ qua.
+          </p>
+
+          <div id="devils-questions-container">
+            <!-- Questions rendered via JS -->
+          </div>
+
+          <div class="flex-between mt-8">
+            <button class="btn btn-secondary" onclick="goToStep(1)"><i class="fa-solid fa-arrow-left"></i> Quay lại</button>
+            <button class="btn btn-primary" onclick="goToStep(3)">Tiếp tục đến Bước 3: Đối chiếu Dữ liệu <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- STEP 3: CROSS-CHECKER & MA TRẬN 4 Ô -->
+        <div class="step-pane" id="pane-step-3">
+          <h3 style="color: #34d399; margin-bottom: 1rem;"><i class="fa-solid fa-chart-pie"></i> Bước 3: Module Kiểm Chứng Số & Ma Trận Phân Tư 4 Ô</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+            Chống <strong>Định kiến Tính sẵn có (Availability Bias)</strong> & <strong>Hiệu ứng Đám đông (Bandwagon Effect)</strong>.
+          </p>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;" class="mb-4">
+            <div class="form-group">
+              <label class="form-label">Cảm nhận của bạn về Mức thu nhập ngành này:</label>
+              <select id="perceived-salary" class="form-control">
+                <option value="very_high">Rất cao (Lương 50tr+ dễ dàng)</option>
+                <option value="high" selected>Khá cao (15 - 30 triệu)</option>
+                <option value="medium">Trung bình</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Cảm nhận về Mức độ Cạnh tranh / Tìm việc:</label>
+              <select id="perceived-comp" class="form-control">
+                <option value="easy">Dễ dàng tìm việc sau khi tốt nghiệp</option>
+                <option value="moderate" selected>Bình thường</option>
+                <option value="hard">Cực kỳ khốc liệt</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Yếu tố ảnh hưởng (Ma trận 4 Ô) -->
+          <div style="background: rgba(30, 41, 59, 0.6); padding: 1.25rem; border-radius: 10px;" class="mb-4">
+            <h5 style="color: #a78bfa; margin-bottom: 0.75rem;"><i class="fa-solid fa-users"></i> Khai báo các Yếu tố Ảnh hưởng tới Quyết định của Bạn:</h5>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer;">
+                <input type="checkbox" class="influence-checkbox" value="friends_choice"> Theo số đông bạn bè trong lớp đăng ký
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer;">
+                <input type="checkbox" class="influence-checkbox" value="viral_tiktok" checked> Thấy video review rầm rộ trên TikTok/Facebook
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer;">
+                <input type="checkbox" class="influence-checkbox" value="parent_demand"> Do gia đình/bố mẹ định hướng
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer;">
+                <input type="checkbox" class="influence-checkbox" value="personal_passion" checked> Do sở thích và năng lực học tập cá nhân
+              </label>
+            </div>
+          </div>
+
+          <!-- Thuật toán Chi phí chìm -->
+          <div style="background: rgba(30, 41, 59, 0.6); padding: 1.25rem; border-radius: 10px;">
+            <h5 style="color: #f43f5e; margin-bottom: 0.75rem;"><i class="fa-solid fa-hourglass-half"></i> Khảo sát Bẫy Chi phí Chìm (Sunk Cost Assessment):</h5>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div>
+                <label class="form-label">Số năm bạn đã theo đuổi định hướng này:</label>
+                <input type="number" id="sunk-years" class="form-control" value="2" min="0" max="10">
+              </div>
+              <div>
+                <label class="form-label">Mức độ ngại thay đổi nếu phát hiện rủi ro mới:</label>
+                <select id="sunk-reluctance" class="form-control">
+                  <option value="1">Linh hoạt: Sẵn sàng đổi ngành nếu có chứng cứ rõ ràng</option>
+                  <option value="2" selected>Do dự: Tiếc thời gian đã học nhưng sẽ cân nhắc</option>
+                  <option value="3">Bảo thủ: Nhất quyết không đổi vì đã lỡ theo nhiều năm</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex-between mt-8">
+            <button class="btn btn-secondary" onclick="goToStep(2)"><i class="fa-solid fa-arrow-left"></i> Quay lại</button>
+            <button class="btn btn-primary" onclick="goToStep(4)">
+              <i class="fa-solid fa-chart-line"></i> Xuất Báo Cáo Scorecard (Kết quả)
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 4: BÁO CÁO KẾT QUẢ SCORECARD -->
+        <div class="step-pane" id="pane-step-4">
+          <div class="text-center mb-4">
+            <h3 style="color: #34d399;"><i class="fa-solid fa-award"></i> Báo Cáo Phân Tích Chỉ Số Định Kiến Tư Duy</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Mã phiên đánh giá: DEBIAS-2026-KHKT-0810 | Người dùng: Học sinh</p>
+          </div>
+
+          <!-- Overall Final Score Display Box -->
+          <div class="glass-card text-center mb-8" style="padding: 2rem; border-color: rgba(14, 165, 233, 0.4);" id="final-score-display">
+            <!-- Score filled via JS -->
+          </div>
+
+          <!-- Breakdown Details Table -->
+          <h4 style="color: #38bdf8; margin-bottom: 0.75rem;"><i class="fa-solid fa-list-check"></i> Chi Tiết Phân Tích 4 Module Phản Biện:</h4>
+          <div id="report-breakdown-details" class="mb-8">
+            <!-- Table filled via JS -->
+          </div>
+
+          <div class="flex-between">
+            <button class="btn btn-secondary" onclick="goToStep(1)"><i class="fa-solid fa-rotate-left"></i> Đánh giá lại từ đầu</button>
+            <button class="btn btn-accent" onclick="exportJuryReport()"><i class="fa-solid fa-print"></i> In / Xuất Báo cáo PDF cho BGK</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: JURY SANDBOX / THỬ NGHIỆM BAN GIÁM KHẢO (1-CLICK TEST CASES) -->
+  <section id="jury-sandbox" style="background: rgba(15, 23, 42, 0.7);">
+    <div class="container">
+      <div class="text-center mb-8">
+        <div class="hero-tag" style="border-color: rgba(245, 158, 11, 0.4); color: var(--accent);">
+          <i class="fa-solid fa-user-gear"></i> Chế độ Thử nghiệm Nhanh
+        </div>
+        <h2>Kịch Bản Thử Nghiệm <span class="gradient-text">Dành Cho Ban Giám Khảo</span></h2>
+        <p style="color: var(--text-muted); max-width: 700px; margin: 0.5rem auto 0 auto;">
+          Dành riêng cho BGK trải nghiệm nhanh thuật toán phân tích định kiến tư duy chỉ với 1 cú nhấp chuột (1-Click Presets).
+        </p>
+      </div>
+
+      <div class="preset-grid">
+        <!-- Preset Case 1 -->
+        <div class="preset-card load-preset-btn" data-case-id="case_it_hype">
+          <span class="preset-tag">KỊCH BẢN BGK 1</span>
+          <h4 style="color: #38bdf8; margin-bottom: 0.5rem;">Ngành IT & Trào lưu Lương 50 Tr</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Học sinh chọn CNTT vì nghe đồn lương cao và theo trend TikTok, bỏ qua tỉ lệ chọi 1:8.5 và nguy cơ thải loại công nghệ.
+          </p>
+          <div style="font-size: 0.8rem; color: var(--accent); font-weight: 600;">
+            <i class="fa-solid fa-bolt"></i> Thử nghiệm kịch bản này ->
+          </div>
+        </div>
+
+        <!-- Preset Case 2 -->
+        <div class="preset-card load-preset-btn" data-case-id="case_bandwagon_mkt">
+          <span class="preset-tag">KỊCH BẢN BGK 2</span>
+          <h4 style="color: #a78bfa; margin-bottom: 0.5rem;">Marketing & Hiệu ứng Đám đông</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Học sinh đăng ký Marketing đơn thuần vì đa số bạn bè trong lớp chọn, thiếu khảo sát năng lực phân tích dữ liệu thực tế.
+          </p>
+          <div style="font-size: 0.8rem; color: var(--accent); font-weight: 600;">
+            <i class="fa-solid fa-bolt"></i> Thử nghiệm kịch bản này ->
+          </div>
+        </div>
+
+        <!-- Preset Case 3 -->
+        <div class="preset-card load-preset-btn" data-case-id="case_sunk_cost">
+          <span class="preset-tag">KỊCH BẢN BGK 3</span>
+          <h4 style="color: #f43f5e; margin-bottom: 0.5rem;">Tài chính & Bẫy Chi phí Chìm</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Học sinh kiên quyết không chuyển ngành dù không phù hợp chỉ vì tiếc 3 năm theo học các khóa chứng chỉ trước đó.
+          </p>
+          <div style="font-size: 0.8rem; color: var(--accent); font-weight: 600;">
+            <i class="fa-solid fa-bolt"></i> Thử nghiệm kịch bản me ->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: DATABASE & METHODOLOGY EXPLORER -->
+  <section id="database-sec">
+    <div class="container">
+      <div class="text-center mb-8">
+        <div class="hero-tag"><i class="fa-solid fa-database"></i> Tầng CSDL & Phương pháp luận</div>
+        <h2>Kho Dữ Liệu Thị Trường Lao Động <span class="gradient-text-blue">& SQL Schema</span></h2>
+        <p style="color: var(--text-muted); max-width: 700px; margin: 0.5rem auto 0 auto;">
+          Dữ liệu đối chiếu thực tế được tích hợp trong hệ thống nhằm đưa ra bằng chứng khách quan cho người dùng.
+        </p>
+      </div>
+
+      <div class="glass-card" style="padding: 1.5rem;">
+        <h4 style="color: #34d399; margin-bottom: 1rem;"><i class="fa-solid fa-table"></i> Bảng Tra Cứu Dữ Liệu Lao Động Mẫu (Labor Market Repository):</h4>
+        <div style="overflow-x: auto;">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Mã Ngành</th>
+                <th>Tên Ngành Nghề</th>
+                <th>Thu Nhập Thực Tế</th>
+                <th>Tăng Trưởng</th>
+                <th>Tỉ Lệ Chọi</th>
+                <th>Nguy Cơ AI Thay Thế</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>it_software</code></td>
+                <td>Công nghệ thông tin & Phần mềm</td>
+                <td>18 - 45 triệu VNĐ/tháng</td>
+                <td><span style="color: #34d399;">+16.5%</span></td>
+                <td>1 : 8.5</td>
+                <td><span style="color: #fbbf24;">12%</span></td>
+              </tr>
+              <tr>
+                <td><code>medicine_pharmacy</code></td>
+                <td>Y khoa & Dược học</td>
+                <td>15 - 40 triệu VNĐ/tháng</td>
+                <td><span style="color: #34d399;">+12.0%</span></td>
+                <td>1 : 12.0</td>
+                <td><span style="color: #10b981;">5%</span></td>
+              </tr>
+              <tr>
+                <td><code>business_marketing</code></td>
+                <td>Quản trị Kinh doanh & Marketing</td>
+                <td>10 - 30 triệu VNĐ/tháng</td>
+                <td><span style="color: #34d399;">+10.5%</span></td>
+                <td>1 : 15.0</td>
+                <td><span style="color: #ef4444;">35%</span></td>
+              </tr>
+              <tr>
+                <td><code>finance_banking</code></td>
+                <td>Tài chính & Ngân hàng</td>
+                <td>14 - 35 triệu VNĐ/tháng</td>
+                <td><span style="color: #34d399;">+8.5%</span></td>
+                <td>1 : 9.0</td>
+                <td><span style="color: #ef4444;">45%</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <a href="#" class="logo mb-4">
+            <span class="logo-badge">KHKT 2026</span>
+            <span>DEBIAS <span class="gradient-text">PROTOCOL</span></span>
+          </a>
+          <p style="color: var(--text-muted); font-size: 0.85rem; max-width: 450px;">
+            Đề tài Khoa học Kỹ thuật: "Xây dựng Hệ thống Hỗ trợ Ra Quyết định & Định hướng Nghề nghiệp Giảm thiểu Định kiến Tư duy".
+          </p>
+        </div>
+        <div style="text-align: right;">
+          <p style="color: #e2e8f0; font-weight: 700;">Dự án Classroom App | Học viên: kieuthi14</p>
+          <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.25rem;">Xuất bản: 10/08/2026 | Phiên bản 2.0 KHKT Edition</p>
+        </div>
+      </div>
+      <div style="border-top: 1px solid var(--border-color); padding-top: 1.5rem; text-align: center; color: var(--text-dim); font-size: 0.8rem;">
+        © 2026 Debias AI Protocol. Phát triển bởi Super Agent AI cho Đề tài KHKT.
+      </div>
+    </div>
+  </footer>
+
+  <!-- App Scripts -->
+  <script src="js/market-data.js"></script>
+  <script src="js/debias-engine.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
