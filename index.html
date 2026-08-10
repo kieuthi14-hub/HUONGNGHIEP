@@ -48,12 +48,12 @@
         <span class="gradient-text">Giảm Thể Định Kiến Tư Duy (Debias AI Protocol)</span>
       </h1>
       <p class="hero-subtitle">
-        Ứng dụng lý thuyết Tâm lý học Nhận thức kết hợp Thuật toán Phản biện & Cơ sở dữ liệu Supabase Cloud nâng cao năng lực định hướng nghề nghiệp khách quan.
+        Ứng dụng lý thuyết Tâm lý học Nhận thức kết hợp Thuật toán Phản biện & Supabase Cloud Realtime Listener cho Ban Giám Khảo.
       </p>
 
       <div class="hero-actions">
         <a href="#debias-app" class="btn btn-primary"><i class="fa-solid fa-play"></i> Bắt đầu Trải nghiệm 4 Bước</a>
-        <a href="#jury-sandbox" class="btn btn-accent"><i class="fa-solid fa-user-check"></i> Chế độ Thử nhanh BGK (1-Click)</a>
+        <a href="#jury-sandbox" class="btn btn-accent"><i class="fa-solid fa-user-check"></i> Chế độ Realtime BGK (1-Click)</a>
       </div>
 
       <!-- Quick Stats -->
@@ -67,8 +67,8 @@
           <div class="stat-label">Cloud Database PostgreSQL</div>
         </div>
         <div class="glass-card stat-card">
-          <div class="stat-number">0.3s</div>
-          <div class="stat-label">Tốc độ Phân tích Ma trận 4 Ô</div>
+          <div class="stat-number">Realtime</div>
+          <div class="stat-label">Đồng bộ BGK Thời Gian Thực</div>
         </div>
         <div class="glass-card stat-card">
           <div class="stat-number">Top 1</div>
@@ -83,9 +83,9 @@
     <div class="container">
       <div class="text-center mb-8">
         <div class="hero-tag"><i class="fa-solid fa-layer-group"></i> Sơ đồ Cấu trúc Dự án KHKT</div>
-        <h2>Kiến Trúc Hệ Thống <span class="gradient-text-blue">4 Tầng Xử Lý (Supabase Powered)</span></h2>
+        <h2>Kiến Trúc Hệ Thống <span class="gradient-text-blue">4 Tầng Xử Lý (Supabase Realtime)</span></h2>
         <p style="color: var(--text-muted); max-width: 700px; margin: 0.5rem auto 0 auto;">
-          Mô hình hóa toàn bộ chuỗi xử lý dữ liệu từ Giao diện Học sinh (Frontend) tới Bảo mật Middleware, Tầng Nghiệp vụ Backend API và CSDL Supabase PostgreSQL.
+          Mô hình hóa toàn bộ chuỗi xử lý dữ liệu từ Giao diện Học sinh (Frontend) tới Bảo mật Middleware, Tầng Nghiệp vụ Backend API và Supabase Realtime Channel.
         </p>
       </div>
 
@@ -142,8 +142,8 @@
         <div class="arch-layer layer-db">
           <div class="arch-layer-header"><i class="fa-solid fa-bolt"></i> 🗄️ Tầng CSDL (Supabase PostgreSQL)</div>
           <div class="arch-node" data-node-key="user-db">
-            <div class="arch-node-title"><i class="fa-solid fa-users"></i> Supabase Profiles DB</div>
-            <div class="arch-node-desc">Lưu trữ hồ sơ học sinh & RLS Auth</div>
+            <div class="arch-node-title"><i class="fa-solid fa-satellite-dish"></i> Supabase Realtime Channel</div>
+            <div class="arch-node-desc">Lắng nghe sự kiện đồng bộ tự động cho BGK</div>
           </div>
           <div class="arch-node" data-node-key="market-db">
             <div class="arch-node-title"><i class="fa-solid fa-server"></i> Labor Market Repository</div>
@@ -168,7 +168,7 @@
         <div class="hero-tag"><i class="fa-solid fa-microchip"></i> Sản phẩm Ứng dụng Thực nghiệm</div>
         <h2>Trải Nghiệm Quy Trình <span class="gradient-text">Debias AI Protocol</span></h2>
         <p style="color: var(--text-muted); max-width: 700px; margin: 0.5rem auto 0 auto;">
-          Học sinh nhập dự định ngành học -> Hệ thống áp dụng 4 Module phản biện -> Xuất Báo cáo Chỉ số & Lưu Supabase DB.
+          Học sinh nhập dự định ngành học -> Hệ thống áp dụng 4 Module phản biện -> Xuất Báo cáo Scorecard & Bắn tín hiệu Realtime cho BGK.
         </p>
       </div>
 
@@ -315,7 +315,7 @@
           <div class="flex-between mt-8">
             <button class="btn btn-secondary" onclick="goToStep(2)"><i class="fa-solid fa-arrow-left"></i> Quay lại</button>
             <button class="btn btn-primary" onclick="goToStep(4)">
-              <i class="fa-solid fa-chart-line"></i> Xuất Báo Cáo Scorecard & Đồng bộ Supabase DB
+              <i class="fa-solid fa-chart-line"></i> Xuất Báo Cáo Scorecard & Bắn Tín Hiệu Realtime
             </button>
           </div>
         </div>
@@ -324,7 +324,7 @@
         <div class="step-pane" id="pane-step-4">
           <div class="text-center mb-4">
             <h3 style="color: #34d399;"><i class="fa-solid fa-award"></i> Báo Cáo Phân Tích Chỉ Số Định Kiến Tư Duy</h3>
-            <p style="color: var(--text-muted); font-size: 0.85rem;">Mã phiên đánh giá: DEBIAS-2026-KHKT-0810 | Supabase Sync Status: <span id="supabase-status-badge" style="color: #10b981; font-weight: 700;">Local Mode</span></p>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Mã phiên đánh giá: DEBIAS-2026-KHKT-0810 | Supabase Realtime Sync: <span id="supabase-status-badge" style="color: #10b981; font-weight: 700;">⚡ Đã kích hoạt Listener</span></p>
           </div>
 
           <!-- Overall Final Score Display Box -->
@@ -348,56 +348,68 @@
     </div>
   </section>
 
-  <!-- SECTION 3: JURY SANDBOX / THỬ NGHIỆM BAN GIÁM KHẢO -->
+  <!-- SECTION 3: JURY SANDBOX & SUPABASE REALTIME MONITOR (MÀN HÌNH GIÁM KHẢO REALTIME) -->
   <section id="jury-sandbox" style="background: rgba(15, 23, 42, 0.7);">
     <div class="container">
       <div class="text-center mb-8">
         <div class="hero-tag" style="border-color: rgba(245, 158, 11, 0.4); color: var(--accent);">
-          <i class="fa-solid fa-user-gear"></i> Chế độ Thử nghiệm Nhanh
+          <i class="fa-solid fa-satellite-dish"></i> Supabase Realtime Jury Monitor
         </div>
-        <h2>Kịch Bản Thử Nghiệm <span class="gradient-text">Dành Cho Ban Giám Khảo</span></h2>
+        <h2>Màn Hình Giám Khảo & <span class="gradient-text">Nhật Ký Đồng Bộ Realtime</span></h2>
         <p style="color: var(--text-muted); max-width: 700px; margin: 0.5rem auto 0 auto;">
-          Dành riêng cho BGK trải nghiệm nhanh thuật toán phân tích định kiến tư duy chỉ với 1 cú nhấp chuột (1-Click Presets).
+          Khi học sinh thực hiện đánh giá trên điện thoại/máy tính cá nhân, kết quả sẽ tự động đẩy về Màn hình Giám khảo theo thời gian thực (Real-time Push).
         </p>
       </div>
 
-      <div class="preset-grid">
-        <!-- Preset Case 1 -->
-        <div class="preset-card load-preset-btn" data-case-id="case_it_hype">
-          <span class="preset-tag">KỊCH BẢN BGK 1</span>
-          <h4 style="color: #38bdf8; margin-bottom: 0.5rem;">Ngành IT & Trào lưu Lương 50 Tr</h4>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-            Học sinh chọn CNTT vì nghe đồn lương cao và theo trend TikTok, bỏ qua tỉ lệ chọi 1:8.5 và nguy cơ thải loại công nghệ.
-          </p>
-          <div style="font-size: 0.8rem; color: var(--accent); font-weight: 600;">
-            <i class="fa-solid fa-bolt"></i> Thử nghiệm kịch bản này ->
-          </div>
-        </div>
-
-        <!-- Preset Case 2 -->
-        <div class="preset-card load-preset-btn" data-case-id="case_bandwagon_mkt">
-          <span class="preset-tag">KỊCH BẢN BGK 2</span>
-          <h4 style="color: #a78bfa; margin-bottom: 0.5rem;">Marketing & Hiệu ứng Đám đông</h4>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-            Học sinh đăng ký Marketing đơn thuần vì đa số bạn bè trong lớp chọn, thiếu khảo sát năng lực phân tích dữ liệu thực tế.
-          </p>
-          <div style="font-size: 0.8rem; color: var(--accent); font-weight: 600;">
-            <i class="fa-solid fa-bolt"></i> Thử nghiệm kịch bản này ->
-          </div>
-        </div>
-
-        <!-- Preset Case 3 -->
-        <div class="preset-card load-preset-btn" data-case-id="case_sunk_cost">
-          <span class="preset-tag">KỊCH BẢN BGK 3</span>
-          <h4 style="color: #f43f5e; margin-bottom: 0.5rem;">Tài chính & Bẫy Chi phí Chìm</h4>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-            Học sinh kiên quyết không chuyển ngành dù không phù hợp chỉ vì tiếc 3 năm theo học các khóa chứng chỉ trước đó.
-          </p>
-          <div style="font-size: 0.8rem; color: var(--accent); font-weight: 600;">
-            <i class="fa-solid fa-bolt"></i> Thử nghiệm kịch bản này ->
+      <!-- Glowing Notification Banner for Realtime Events -->
+      <div id="realtime-notification-banner" style="display: none; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 2rem; animation: fadeIn 0.4s ease;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div style="font-size: 1.5rem; color: #34d399;"><i class="fa-solid fa-bell-concierge"></i></div>
+          <div id="realtime-banner-content" style="flex: 1; font-size: 0.95rem; color: #f8fafc;">
+            <!-- Realtime event content -->
           </div>
         </div>
       </div>
+
+      <!-- Presets & Live Feed Dual Grid -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+        <!-- Left: 1-Click Presets -->
+        <div>
+          <h4 style="color: #fbbf24; margin-bottom: 1rem;"><i class="fa-solid fa-bolt"></i> 1-Click Presets Chấm Nhanh:</h4>
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="preset-card load-preset-btn" data-case-id="case_it_hype">
+              <span class="preset-tag">KỊCH BẢN BGK 1</span>
+              <h5 style="color: #38bdf8; margin-bottom: 0.3rem;">IT & Trào lưu Lương 50 Tr</h5>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Bẫy Availability Bias & chạy theo trend mạng.</p>
+            </div>
+
+            <div class="preset-card load-preset-btn" data-case-id="case_bandwagon_mkt">
+              <span class="preset-tag">KỊCH BẢN BGK 2</span>
+              <h5 style="color: #a78bfa; margin-bottom: 0.3rem;">Marketing & Đám đông</h5>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Hiệu ứng đám đông Bandwagon theo bạn bè.</p>
+            </div>
+
+            <div class="preset-card load-preset-btn" data-case-id="case_sunk_cost">
+              <span class="preset-tag">KỊCH BẢN BGK 3</span>
+              <h5 style="color: #f43f5e; margin-bottom: 0.3rem;">Tài chính & Bẫy Chi phí Chìm</h5>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Ngại đổi hướng vì tiếc thời gian đã học.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Supabase Realtime Live Activity Feed -->
+        <div>
+          <h4 style="color: #38bdf8; margin-bottom: 1rem;"><i class="fa-solid fa-list-ul"></i> Nhật Ký Realtime Feed BGK:</h4>
+          <div class="glass-card" style="padding: 1.25rem; min-height: 280px; max-height: 380px; overflow-y: auto;" id="realtime-jury-feed">
+            <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; padding-top: 4rem;" id="empty-feed-placeholder">
+              <i class="fa-solid fa-wifi" style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem; display: block;"></i>
+              Đang lắng nghe sự kiện Realtime từ Supabase DB...<br>
+              <em>(Nhấp vào 1-Click Preset ở bên trái hoặc gửi đánh giá ở Bước 4 để xem tín hiệu nhảy thời gian thực!)</em>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -481,11 +493,11 @@
         </div>
         <div style="text-align: right;">
           <p style="color: #e2e8f0; font-weight: 700;">Dự án Classroom App | Học viên: kieuthi14</p>
-          <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.25rem;">Xuất bản: 10/08/2026 | Supabase Edition</p>
+          <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.25rem;">Xuất bản: 10/08/2026 | Supabase Realtime Edition</p>
         </div>
       </div>
       <div style="border-top: 1px solid var(--border-color); padding-top: 1.5rem; text-align: center; color: var(--text-dim); font-size: 0.8rem;">
-        © 2026 Debias AI Protocol. Tích hợp Supabase DB cho Đề tài KHKT.
+        © 2026 Debias AI Protocol. Tích hợp Supabase Realtime Listener cho BGK KHKT.
       </div>
     </div>
   </footer>
