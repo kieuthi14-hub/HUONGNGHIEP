@@ -1,6 +1,6 @@
 /**
  * DEBIAS AI PROTOCOL - MAIN APP CONTROLLER
- * Xử lý tương tác Giao diện, Điều phối Wizard, Supabase Sync & Ban Giám Khảo Sandbox
+ * Xử lý tương tác Giao diện, Điều phối Wizard, Supabase Realtime Sync & Ban Giám Khảo Sandbox
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initArchDiagramInteractivity();
   initWizardFlow();
   initJurySandbox();
+  initRealtimeJuryListener();
 });
 
 /* 1. Navbar Scroll Header */
@@ -38,7 +39,7 @@ function initArchDiagramInteractivity() {
     'matrix-4quad': 'Module Ma Trận Phân Tư 4 Ô: Phân tích và cô lập Hiệu ứng đám đông (Bandwagon Effect).',
     'sunk-cost': 'Module Chi Phí Chìm: Tính toán chi phí cơ hội và cảnh báo bẫy tâm lý tiếc nguồn lực đã mất.',
     'market-service': 'Dịch vụ Tích hợp Thị trường: Kết nối API tra cứu thông tin tuyển dụng & xu hướng nghề nghiệp 5 năm.',
-    'user-db': 'Cơ sở Dữ liệu Supabase Profiles: Lưu trữ hồ sơ học sinh, phiên đánh giá tư duy & quản lý phân quyền RLS.',
+    'user-db': 'Supabase Realtime Channel: Kênh lắng nghe sự kiện đẩy dữ liệu tự động cho Màn hình Giám khảo.',
     'market-db': 'Kho Dữ liệu Thị trường Supabase: CSDL Cloud lưu trữ thông tin thực tế về tỉ lệ chọi, thu nhập, nguy cơ AI thay thế.'
   };
 
@@ -233,29 +234,82 @@ function calculateFinalResults() {
     `;
   }
 
+  const assessmentPayload = {
+    studentName: 'Học sinh KHKT',
+    careerCode: careerId,
+    confScore: confPoints,
+    availScore: availResult.biasPoints,
+    bandScore: bandwagonResult.bandwagonScore,
+    sunkScore: sunkResult.sunkCostPoints,
+    overallScore: final.score,
+    objectivityIndex: final.objectivityIndex,
+    classification: final.classification
+  };
+
+  // Kích hoạt hiển thị Realtime Feed trên Màn hình BGK Sandbox
+  handleRealtimeEvent(assessmentPayload);
+
   // Tự động đồng bộ kết quả lên Supabase Cloud DB
   if (typeof saveAssessmentToSupabase === 'function') {
-    saveAssessmentToSupabase({
-      studentName: 'Học sinh KHKT',
-      careerCode: careerId,
-      confScore: confPoints,
-      availScore: availResult.biasPoints,
-      bandScore: bandwagonResult.bandwagonScore,
-      sunkScore: sunkResult.sunkCostPoints,
-      overallScore: final.score,
-      objectivityIndex: final.objectivityIndex,
-      classification: final.classification
-    }).then(res => {
+    saveAssessmentToSupabase(assessmentPayload).then(res => {
       const badge = document.getElementById('supabase-status-badge');
       if (badge && res) {
-        badge.innerHTML = '⚡ Đã đồng bộ Supabase Cloud';
+        badge.innerHTML = '⚡ Đã bắn sự kiện Realtime Supabase Cloud';
         badge.style.color = '#38bdf8';
       }
     });
   }
 }
 
-/* 4. Jury Sandbox Presets (Kịch bản dùng thử 1-Click cho Ban Giám Khảo) */
+/* 4. Supabase Realtime Listener Integration for Jury Sandbox */
+function initRealtimeJuryListener() {
+  if (typeof subscribeToRealtimeAssessments === 'function') {
+    subscribeToRealtimeAssessments((newRecord) => {
+      handleRealtimeEvent(newRecord);
+    });
+  }
+}
+
+function handleRealtimeEvent(record) {
+  const banner = document.getElementById('realtime-notification-banner');
+  const bannerContent = document.getElementById('realtime-banner-content');
+  const feed = document.getElementById('realtime-jury-feed');
+  const placeholder = document.getElementById('empty-feed-placeholder');
+
+  if (placeholder) placeholder.style.display = 'none';
+
+  const timeStr = new Date().toLocaleTimeString('vi-VN');
+  const studentName = record.student_name || record.studentName || 'Học sinh KHKT';
+  const score = record.overall_debias_score !== undefined ? record.overall_debias_score : (record.overallScore || 0);
+  const classification = record.classification || 'Phân tích tư duy hoàn tất';
+
+  // 1. Hiển thị Banner Thông báo Nhấp nháy
+  if (banner && bannerContent) {
+    bannerContent.innerHTML = `
+      <strong>⚡ [REALTIME EVENT - ${timeStr}]</strong> Có đánh giá tư duy mới từ <strong>${studentName}</strong>!<br>
+      <span style="color: #34d399; font-weight: 700;">Chỉ số Định kiến: ${score}%</span> — Xếp loại: <em>${classification}</em>
+    `;
+    banner.style.display = 'block';
+    setTimeout(() => { banner.style.display = 'none'; }, 6000);
+  }
+
+  // 2. Đẩy thêm 1 dòng log vào Realtime Jury Feed
+  if (feed) {
+    const item = document.createElement('div');
+    item.style.cssText = 'background: rgba(30, 41, 59, 0.8); border-left: 4px solid #10b981; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 0.75rem; animation: fadeIn 0.4s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.3);';
+    item.innerHTML = `
+      <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #94a3b8;">
+        <span><i class="fa-solid fa-clock"></i> ${timeStr}</span>
+        <span style="color: #10b981; font-weight: 700;"><i class="fa-solid fa-bolt"></i> REALTIME EVENT</span>
+      </div>
+      <div style="font-weight: 700; color: #fff; font-size: 0.9rem; margin: 0.25rem 0;">${studentName} - Mã ngành: <code>${record.career_code || record.careerCode}</code></div>
+      <div style="font-size: 0.8rem; color: #38bdf8;">Định kiến: <strong style="color: #fbbf24;">${score}%</strong> | ${classification}</div>
+    `;
+    feed.insertBefore(item, feed.firstChild);
+  }
+}
+
+/* 5. Jury Sandbox Presets (Kịch bản dùng thử 1-Click cho Ban Giám Khảo) */
 function initJurySandbox() {
   const presetBtns = document.querySelectorAll('.load-preset-btn');
   presetBtns.forEach(btn => {
@@ -278,7 +332,7 @@ function loadJuryPresetCase(caseId) {
       cb.checked = (cb.value === 'viral_tiktok' || cb.value === 'friends_choice');
     });
 
-    alert('✅ Đã nạp Kịch bản BGK 1: "Chạy theo trào lưu IT lương 50 triệu". Nhấn OK để chuyển tới trang Báo cáo kết quả phân tích!');
+    alert('✅ Đã nạp Kịch bản BGK 1: "Chạy theo trào lưu IT lương 50 triệu". Nhấn OK để xem tín hiệu Realtime!');
     goToStep(4);
 
   } else if (caseId === 'case_bandwagon_mkt') {
@@ -290,7 +344,7 @@ function loadJuryPresetCase(caseId) {
       cb.checked = (cb.value === 'friends_choice' || cb.value === 'parent_demand');
     });
 
-    alert('✅ Đã nạp Kịch bản BGK 2: "Chọn Marketing vì bạn bè đăng ký đông". Nhấn OK để xem phân tích Ma trận 4 Ô!');
+    alert('✅ Đã nạp Kịch bản BGK 2: "Chọn Marketing vì bạn bè đăng ký đông". Nhấn OK để xem tín hiệu Realtime!');
     goToStep(4);
 
   } else if (caseId === 'case_sunk_cost') {
@@ -298,7 +352,7 @@ function loadJuryPresetCase(caseId) {
     document.getElementById('sunk-years').value = '3';
     document.getElementById('sunk-reluctance').value = '3';
 
-    alert('✅ Đã nạp Kịch bản BGK 3: "Bẫy chi phí chìm - Ngại thay đổi vì tiếc 3 năm theo học". Nhấn OK để xem phân tích thuật toán!');
+    alert('✅ Đã nạp Kịch bản BGK 3: "Bẫy chi phí chìm - Ngại thay đổi vì tiếc 3 năm theo học". Nhấn OK để xem tín hiệu Realtime!');
     goToStep(4);
   }
 }
