@@ -1,6 +1,6 @@
 /**
- * DEBIAS AI PROTOCOL - SUPABASE CONFIGURATION & REALTIME CLIENT
- * Đã kết nối dự án Supabase chính thức của thầy/cô (Ref: fwfjciayddfrllskjqna)
+ * DEBIAS AI PROTOCOL - SUPABASE CONFIGURATION & AUTH SYSTEM
+ * Tích hợp hệ thống Đăng ký / Đăng nhập Username & Mật khẩu đồng bộ Supabase Cloud
  */
 
 const SUPABASE_URL = "https://fwfjciayddfrllskjqna.supabase.co";
@@ -12,67 +12,124 @@ let supabaseClient = null;
 if (typeof supabase !== 'undefined') {
   try {
     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    console.log("⚡ [LIVE SUPABASE] Đã kết nối thành công tới Supabase Project: https://fwfjciayddfrllskjqna.supabase.co");
+    console.log("⚡ [SUPABASE AUTH] Đã kết nối hệ thống Đăng nhập / Đăng ký Supabase Cloud DB!");
   } catch (err) {
     console.warn("⚠️ Khởi tạo Supabase Client thất bại:", err);
   }
 }
 
 /**
- * Tải Dữ liệu Thị trường Lao động từ Supabase Cloud DB
+ * 1. ĐĂNG KÝ TÀI KHOẢN MỚI (Lưu trực tiếp vào Supabase public.users_auth)
  */
-async function loadLaborMarketFromSupabase() {
-  if (!supabaseClient) return null;
-  try {
-    const { data, error } = await supabaseClient
-      .from('labor_market_repository')
-      .select('*');
-    if (error) throw error;
-    return data;
-  } catch (err) {
-    console.warn("ℹ️ Đang dùng dữ liệu dự phòng cục bộ do chưa chạy SQL khởi tạo trên Supabase.", err.message);
-    return null;
-  }
-}
-
-/**
- * Lưu Kết quả Đánh giá Định kiến Tư duy lên Supabase Table `debias_assessments`
- */
-async function saveAssessmentToSupabase(assessmentData) {
+async function registerUserSupabase(username, password, fullName, schoolName, gradeLevel, role) {
   if (!supabaseClient) {
-    console.log("ℹ️ [Local Mode] Chưa khởi tạo Supabase Client.");
-    return null;
+    return { success: false, message: "Supabase chưa sẵn sàng." };
   }
 
   try {
+    // Check if username already exists
+    const { data: existingUser } = await supabaseClient
+      .from('users_auth')
+      .select('id')
+      .eq('username', username)
+      .single();
+
+    if (existingUser) {
+      return { success: false, message: `Tên đăng nhập "${username}" đã tồn tại trên hệ thống. Vui lòng chọn username khác!` };
+    }
+
+    // Insert new user record into Supabase
     const { data, error } = await supabaseClient
-      .from('debias_assessments')
+      .from('users_auth')
       .insert([
         {
-          student_name: assessmentData.studentName || 'Học sinh KHKT',
-          career_code: assessmentData.careerCode,
-          confirmation_bias_score: assessmentData.confScore,
-          availability_bias_score: assessmentData.availScore,
-          bandwagon_bias_score: assessmentData.bandScore,
-          sunk_cost_bias_score: assessmentData.sunkScore,
-          overall_debias_score: assessmentData.overallScore,
-          objectivity_index: assessmentData.objectivityIndex,
-          classification: assessmentData.classification
+          username: username,
+          password_hash: password, // Mật khẩu lưu đồng bộ trên Supabase
+          full_name: fullName,
+          school_name: schoolName,
+          grade_level: gradeLevel,
+          role: role || 'student'
         }
       ])
       .select();
 
     if (error) throw error;
-    console.log("✅ [LIVE SUPABASE] Đã đồng bộ thành công lên Supabase Cloud DB:", data);
-    return data;
+    return { success: true, user: data[0], message: "Đăng ký tài khoản thành công!" };
+
   } catch (err) {
-    console.warn("ℹ️ Cần chạy tệp schema/supabase_init.sql trong SQL Editor của Supabase để tạo bảng:", err.message);
+    console.error("Lỗi đăng ký Supabase:", err.message);
+    return { success: false, message: `Lỗi đăng ký: ${err.message}` };
+  }
+}
+
+/**
+ * 2. ĐĂNG NHẬP HỆ THỐNG (Đồng bộ tra cứu từ Supabase public.users_auth)
+ */
+async function loginUserSupabase(username, password) {
+  if (!supabaseClient) {
+    return { success: false, message: "Supabase chưa sẵn sàng." };
+  }
+
+  try {
+    const { data, error } = await supabaseClient
+      .from('users_auth')
+      .select('*')
+      .eq('username', username)
+      .eq('password_hash', password)
+      .single();
+
+    if (error || !data) {
+      return { success: false, message: "Tên đăng nhập hoặc mật khẩu không chính xác!" };
+    }
+
+    return { success: true, user: data, message: "Đăng nhập thành công!" };
+
+  } catch (err) {
+    console.error("Lỗi đăng nhập Supabase:", err.message);
+    return { success: false, message: "Tên đăng nhập hoặc mật khẩu không đúng!" };
+  }
+}
+
+/**
+ * 3. LƯU KẾT QUẢ ĐÁNH GIÁ (Gắn ID & Username người dùng đã đăng nhập)
+ */
+async function saveAssessmentToSupabase(assessmentData) {
+  if (!supabaseClient) return null;
+
+  try {
+    const currentUser = JSON.parse(localStorage.getItem('khkt_current_user') || '{}');
+
+    const payload = {
+      user_id: currentUser.id || null,
+      username: currentUser.username || 'hocsinh_khkt',
+      student_name: currentUser.full_name || assessmentData.studentName || 'Học sinh KHKT',
+      career_code: assessmentData.careerCode,
+      confirmation_bias_score: assessmentData.confScore,
+      availability_bias_score: assessmentData.availScore,
+      bandwagon_bias_score: assessmentData.bandScore,
+      sunk_cost_bias_score: assessmentData.sunkScore,
+      overall_debias_score: assessmentData.overallScore,
+      objectivity_index: assessmentData.objectivityIndex,
+      classification: assessmentData.classification
+    };
+
+    const { data, error } = await supabaseClient
+      .from('debias_assessments')
+      .insert([payload])
+      .select();
+
+    if (error) throw error;
+    console.log("✅ [LIVE SUPABASE] Đã lưu bài test theo User:", data);
+    return data;
+
+  } catch (err) {
+    console.warn("⚠️ Lỗi lưu đánh giá lên Supabase:", err.message);
     return null;
   }
 }
 
 /**
- * Đăng ký Listener Realtime Subscriptions cho Màn hình Ban Giám Khảo (Jury Monitor)
+ * 4. ĐĂNG KÝ LISTENER REALTIME FOR JURY MONITOR
  */
 function subscribeToRealtimeAssessments(onNewAssessmentCallback) {
   if (!supabaseClient) return null;
@@ -83,15 +140,13 @@ function subscribeToRealtimeAssessments(onNewAssessmentCallback) {
       'postgres_changes',
       { event: 'INSERT', schema: 'public', table: 'debias_assessments' },
       (payload) => {
-        console.log('⚡ [LIVE REALTIME EVENT] Đã nhận đánh giá mới từ Supabase:', payload.new);
+        console.log('⚡ [LIVE REALTIME EVENT] Đánh giá mới từ Supabase:', payload.new);
         if (typeof onNewAssessmentCallback === 'function') {
           onNewAssessmentCallback(payload.new);
         }
       }
     )
-    .subscribe((status) => {
-      console.log('📡 Trạng thái Supabase Realtime Channel:', status);
-    });
+    .subscribe();
 
   return channel;
 }
