@@ -1,5 +1,5 @@
 /**
- * DEBIAS AI PROTOCOL - SUPABASE CONFIGURATION & CLIENT
+ * DEBIAS AI PROTOCOL - SUPABASE CONFIGURATION & REALTIME SUBSCRIPTION
  * Thầy/Cô điền URL và ANON KEY từ bảng điều khiển Supabase vào 2 biến dưới đây:
  */
 
@@ -12,12 +12,12 @@ let supabaseClient = null;
 if (typeof supabase !== 'undefined' && SUPABASE_URL !== "YOUR_SUPABASE_PROJECT_URL") {
   try {
     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    console.log("⚡ Supabase Client initialized successfully!");
+    console.log("⚡ Supabase Client & Realtime System initialized successfully!");
   } catch (err) {
     console.warn("⚠️ Chưa cấu hình Supabase URL/Key hợp lệ. Đang dùng chế độ Mock Data.", err);
   }
 } else {
-  console.log("ℹ️ Đang chạy ở chế độ offline/local data. Để kết nối Supabase, vui lòng cập nhật SUPABASE_URL & SUPABASE_ANON_KEY trong js/supabase-config.js");
+  console.log("ℹ️ Đang chạy ở chế độ offline/local data. Để kết nối Supabase Realtime, vui lòng cập nhật SUPABASE_URL & SUPABASE_ANON_KEY trong js/supabase-config.js");
 }
 
 /**
@@ -71,4 +71,33 @@ async function saveAssessmentToSupabase(assessmentData) {
     console.error("❌ Lỗi lưu dữ liệu lên Supabase:", err.message);
     return null;
   }
+}
+
+/**
+ * Đăng ký Listener Realtime Subscriptions cho Màn hình Ban Giám Khảo (Jury Monitor)
+ * Mỗi khi có kết quả mới được đẩy lên Supabase DB, sự kiện tự động kích hoạt callback ngay lập tức
+ */
+function subscribeToRealtimeAssessments(onNewAssessmentCallback) {
+  if (!supabaseClient) {
+    console.log("ℹ️ Realtime Listener đang hoạt động ở chế độ Local Event simulation.");
+    return null;
+  }
+
+  const channel = supabaseClient
+    .channel('realtime_debias_assessments')
+    .on(
+      'postgres_changes',
+      { event: 'INSERT', schema: 'public', table: 'debias_assessments' },
+      (payload) => {
+        console.log('⚡ [SUPABASE REALTIME EVENT] Đã nhận đánh giá mới từ Học sinh:', payload.new);
+        if (typeof onNewAssessmentCallback === 'function') {
+          onNewAssessmentCallback(payload.new);
+        }
+      }
+    )
+    .subscribe((status) => {
+      console.log('📡 Trạng thái Supabase Realtime Subscription Channel:', status);
+    });
+
+  return channel;
 }
