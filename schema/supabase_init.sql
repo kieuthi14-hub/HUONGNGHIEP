@@ -96,6 +96,18 @@ CREATE POLICY "Public Insert Assessments" ON public.debias_assessments FOR INSER
 CREATE POLICY "Public Insert Bias Logs" ON public.bias_logs FOR INSERT WITH CHECK (true);
 
 -- ============================================================================
+-- CẤU HÌNH REALTIME LISTENER SUPABASE (ĐỒNG BỘ DỮ LIỆU THỜI GIAN THỰC FOR BGK)
+-- ============================================================================
+
+-- Bật Realtime Subscription cho bảng debias_assessments
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_publication WHERE pubname = 'supabase_realtime') THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.debias_assessments;
+  END IF;
+END $$;
+
+-- ============================================================================
 -- NẠP DỮ LIỆU MẪU (SEED DATA CHO SUPABASE)
 -- ============================================================================
 
