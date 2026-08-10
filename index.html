@@ -29,10 +29,13 @@
         <li><a href="#architecture"><i class="fa-solid fa-sitemap"></i> Kiến trúc Hệ thống</a></li>
         <li><a href="#debias-app"><i class="fa-solid fa-brain"></i> Ứng dụng Debias UI</a></li>
         <li><a href="#jury-sandbox"><i class="fa-solid fa-award"></i> Thử nghiệm BGK</a></li>
-        <li><a href="#database-sec"><i class="fa-solid fa-bolt"></i> CSDL Supabase</a></li>
+        <li><a href="#database-sec"><i class="fa-solid fa-bolt"></i> CSDL Supabase Auth</a></li>
       </ul>
-      <div>
-        <a href="#debias-app" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> Thử nghiệm Ngay</a>
+      <div id="nav-auth-widget">
+        <!-- Rendered via JS based on logged in state -->
+        <button class="btn btn-primary" onclick="openAuthModal('login')">
+          <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập / Đăng Ký
+        </button>
       </div>
     </div>
   </nav>
@@ -48,12 +51,12 @@
         <span class="gradient-text">Giảm Thể Định Kiến Tư Duy (Debias AI Protocol)</span>
       </h1>
       <p class="hero-subtitle">
-        Ứng dụng lý thuyết Tâm lý học Nhận thức kết hợp Thuật toán Phản biện & Supabase Cloud Realtime Listener cho Ban Giám Khảo.
+        Ứng dụng lý thuyết Tâm lý học Nhận thức kết hợp Thuật toán Phản biện & Hệ thống Đăng nhập / Đăng ký đồng bộ Supabase Cloud DB.
       </p>
 
       <div class="hero-actions">
         <a href="#debias-app" class="btn btn-primary"><i class="fa-solid fa-play"></i> Bắt đầu Trải nghiệm 4 Bước</a>
-        <a href="#jury-sandbox" class="btn btn-accent"><i class="fa-solid fa-user-check"></i> Chế độ Realtime BGK (1-Click)</a>
+        <button onclick="openAuthModal('register')" class="btn btn-accent"><i class="fa-solid fa-user-plus"></i> Đăng Ký Tài Khoản Mới</button>
       </div>
 
       <!-- Quick Stats -->
@@ -63,8 +66,8 @@
           <div class="stat-label">Module Giảm Định kiến Cốt lõi</div>
         </div>
         <div class="glass-card stat-card">
-          <div class="stat-number">Supabase</div>
-          <div class="stat-label">Cloud Database PostgreSQL</div>
+          <div class="stat-number">Supabase DB</div>
+          <div class="stat-label">Đồng bộ Tài khoản Users Auth</div>
         </div>
         <div class="glass-card stat-card">
           <div class="stat-number">Realtime</div>
@@ -83,9 +86,9 @@
     <div class="container">
       <div class="text-center mb-8">
         <div class="hero-tag"><i class="fa-solid fa-layer-group"></i> Sơ đồ Cấu trúc Dự án KHKT</div>
-        <h2>Kiến Trúc Hệ Thống <span class="gradient-text-blue">4 Tầng Xử Lý (Supabase Realtime)</span></h2>
+        <h2>Kiến Trúc Hệ Thống <span class="gradient-text-blue">4 Tầng Xử Lý (Supabase Auth Sync)</span></h2>
         <p style="color: var(--text-muted); max-width: 700px; margin: 0.5rem auto 0 auto;">
-          Mô hình hóa toàn bộ chuỗi xử lý dữ liệu từ Giao diện Học sinh (Frontend) tới Bảo mật Middleware, Tầng Nghiệp vụ Backend API và Supabase Realtime Channel.
+          Mô hình hóa toàn bộ chuỗi xử lý dữ liệu từ Giao diện Học sinh (Frontend) tới Bảo mật Middleware, Tầng Nghiệp vụ Backend API và CSDL Supabase Auth `public.users_auth`.
         </p>
       </div>
 
@@ -96,7 +99,7 @@
           <div class="arch-layer-header"><i class="fa-solid fa-desktop"></i> 🌐 Tầng Giao diện (Frontend)</div>
           <div class="arch-node" data-node-key="debias-ui">
             <div class="arch-node-title"><i class="fa-solid fa-window-maximize"></i> Giao diện Học sinh (Debias UI)</div>
-            <div class="arch-node-desc">Giao diện tương tác trực quan cho học sinh & BGK</div>
+            <div class="arch-node-desc">Form Đăng ký/Đăng nhập & Giao diện tương tác</div>
           </div>
         </div>
 
@@ -105,7 +108,7 @@
           <div class="arch-layer-header"><i class="fa-solid fa-shield-halved"></i> 🛡️ Tầng Bảo mật & Middleware</div>
           <div class="arch-node" data-node-key="auth-guard">
             <div class="arch-node-title"><i class="fa-solid fa-lock"></i> API Gateway & Auth Guard</div>
-            <div class="arch-node-desc">Xác thực tài khoản học sinh & giám khảo</div>
+            <div class="arch-node-desc">Xác thực Username/Mật khẩu đồng bộ DB</div>
           </div>
         </div>
 
@@ -142,8 +145,8 @@
         <div class="arch-layer layer-db">
           <div class="arch-layer-header"><i class="fa-solid fa-bolt"></i> 🗄️ Tầng CSDL (Supabase PostgreSQL)</div>
           <div class="arch-node" data-node-key="user-db">
-            <div class="arch-node-title"><i class="fa-solid fa-satellite-dish"></i> Supabase Realtime Channel</div>
-            <div class="arch-node-desc">Lắng nghe sự kiện đồng bộ tự động cho BGK</div>
+            <div class="arch-node-title"><i class="fa-solid fa-user-check"></i> public.users_auth Table</div>
+            <div class="arch-node-desc">Lưu trữ username, password & phân quyền</div>
           </div>
           <div class="arch-node" data-node-key="market-db">
             <div class="arch-node-title"><i class="fa-solid fa-server"></i> Labor Market Repository</div>
@@ -168,7 +171,7 @@
         <div class="hero-tag"><i class="fa-solid fa-microchip"></i> Sản phẩm Ứng dụng Thực nghiệm</div>
         <h2>Trải Nghiệm Quy Trình <span class="gradient-text">Debias AI Protocol</span></h2>
         <p style="color: var(--text-muted); max-width: 700px; margin: 0.5rem auto 0 auto;">
-          Học sinh nhập dự định ngành học -> Hệ thống áp dụng 4 Module phản biện -> Xuất Báo cáo Scorecard & Bắn tín hiệu Realtime cho BGK.
+          Học sinh đăng nhập -> Chọn dự định ngành học -> Áp dụng 4 Module phản biện -> Xuất Báo cáo Scorecard gắn theo User.
         </p>
       </div>
 
@@ -315,7 +318,7 @@
           <div class="flex-between mt-8">
             <button class="btn btn-secondary" onclick="goToStep(2)"><i class="fa-solid fa-arrow-left"></i> Quay lại</button>
             <button class="btn btn-primary" onclick="goToStep(4)">
-              <i class="fa-solid fa-chart-line"></i> Xuất Báo Cáo Scorecard & Bắn Tín Hiệu Realtime
+              <i class="fa-solid fa-chart-line"></i> Xuất Báo Cáo Scorecard & Đồng bộ Supabase DB
             </button>
           </div>
         </div>
@@ -324,7 +327,7 @@
         <div class="step-pane" id="pane-step-4">
           <div class="text-center mb-4">
             <h3 style="color: #34d399;"><i class="fa-solid fa-award"></i> Báo Cáo Phân Tích Chỉ Số Định Kiến Tư Duy</h3>
-            <p style="color: var(--text-muted); font-size: 0.85rem;">Mã phiên đánh giá: DEBIAS-2026-KHKT-0810 | Supabase Realtime Sync: <span id="supabase-status-badge" style="color: #10b981; font-weight: 700;">⚡ Đã kích hoạt Listener</span></p>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Mã phiên đánh giá: DEBIAS-2026-KHKT-0810 | Tài khoản: <strong style="color: #38bdf8;" id="report-user-name">Khách</strong> | Supabase Sync: <span id="supabase-status-badge" style="color: #10b981; font-weight: 700;">⚡ Đã kết nối DB</span></p>
           </div>
 
           <!-- Overall Final Score Display Box -->
@@ -348,7 +351,7 @@
     </div>
   </section>
 
-  <!-- SECTION 3: JURY SANDBOX & SUPABASE REALTIME MONITOR (MÀN HÌNH GIÁM KHẢO REALTIME) -->
+  <!-- SECTION 3: JURY SANDBOX & SUPABASE REALTIME MONITOR -->
   <section id="jury-sandbox" style="background: rgba(15, 23, 42, 0.7);">
     <div class="container">
       <div class="text-center mb-8">
@@ -357,7 +360,7 @@
         </div>
         <h2>Màn Hình Giám Khảo & <span class="gradient-text">Nhật Ký Đồng Bộ Realtime</span></h2>
         <p style="color: var(--text-muted); max-width: 700px; margin: 0.5rem auto 0 auto;">
-          Khi học sinh thực hiện đánh giá trên điện thoại/máy tính cá nhân, kết quả sẽ tự động đẩy về Màn hình Giám khảo theo thời gian thực (Real-time Push).
+          Khi học sinh đăng nhập & gửi bài đánh giá, dữ liệu sẽ tự động đẩy về Màn hình Giám khảo theo thời gian thực (Real-time Push).
         </p>
       </div>
 
@@ -403,8 +406,7 @@
           <div class="glass-card" style="padding: 1.25rem; min-height: 280px; max-height: 380px; overflow-y: auto;" id="realtime-jury-feed">
             <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; padding-top: 4rem;" id="empty-feed-placeholder">
               <i class="fa-solid fa-wifi" style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem; display: block;"></i>
-              Đang lắng nghe sự kiện Realtime từ Supabase DB...<br>
-              <em>(Nhấp vào 1-Click Preset ở bên trái hoặc gửi đánh giá ở Bước 4 để xem tín hiệu nhảy thời gian thực!)</em>
+              Đang lắng nghe sự kiện Realtime từ Supabase public.users_auth & debias_assessments...
             </div>
           </div>
         </div>
@@ -418,9 +420,9 @@
     <div class="container">
       <div class="text-center mb-8">
         <div class="hero-tag"><i class="fa-solid fa-bolt"></i> Tầng CSDL Supabase Cloud</div>
-        <h2>Kho Dữ Liệu Thị Trường Lao Động <span class="gradient-text-blue">& Supabase Schema</span></h2>
+        <h2>Kho Dữ Liệu Thị Trường Lao Động <span class="gradient-text-blue">& Supabase Auth Schema</span></h2>
         <p style="color: var(--text-muted); max-width: 700px; margin: 0.5rem auto 0 auto;">
-          Dữ liệu đối chiếu thực tế được đồng bộ trực tuyến qua nền tảng Supabase Cloud Database.
+          Dữ liệu đối chiếu thực tế & thông tin tài khoản được lưu trữ an toàn trên Supabase Cloud Database (`public.users_auth`).
         </p>
       </div>
 
@@ -478,6 +480,96 @@
     </div>
   </section>
 
+  <!-- AUTH MODAL (ĐĂNG NHẬP / ĐĂNG KÝ BẰNG USERNAME MẬT KHẨU) -->
+  <div id="auth-modal" style="display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); align-items: center; justify-content: center; padding: 1rem;">
+    <div class="glass-card" style="width: 100%; max-width: 480px; padding: 2rem; position: relative; border-color: rgba(14, 165, 233, 0.4);">
+      
+      <!-- Close Modal Button -->
+      <button onclick="closeAuthModal()" style="position: absolute; top: 1.25rem; right: 1.25rem; background: none; border: none; color: var(--text-muted); font-size: 1.25rem; cursor: pointer;">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Auth Tabs Header -->
+      <div style="display: flex; gap: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1.5rem; padding-bottom: 0.5rem;">
+        <button id="tab-btn-login" class="btn" style="background: none; border: none; color: var(--primary); font-weight: 700; font-size: 1rem; padding: 0.5rem 0; border-bottom: 2px solid var(--primary);" onclick="switchAuthTab('login')">
+          <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập
+        </button>
+        <button id="tab-btn-register" class="btn" style="background: none; border: none; color: var(--text-muted); font-weight: 700; font-size: 1rem; padding: 0.5rem 0;" onclick="switchAuthTab('register')">
+          <i class="fa-solid fa-user-plus"></i> Đăng Ký Tài Khoản
+        </button>
+      </div>
+
+      <!-- Error / Success Alert Box -->
+      <div id="auth-alert-box" style="display: none; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.85rem;"></div>
+
+      <!-- FORM 1: ĐĂNG NHẬP -->
+      <form id="login-form" onsubmit="handleLoginSubmit(event)">
+        <div class="form-group">
+          <label class="form-label" for="login-username"><i class="fa-solid fa-user"></i> Tên đăng nhập (Username):</label>
+          <input type="text" id="login-username" class="form-control" placeholder="VD: kieuthi14" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="login-password"><i class="fa-solid fa-key"></i> Mật khẩu:</label>
+          <input type="password" id="login-password" class="form-control" placeholder="Nhập mật khẩu..." required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+          <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập Ngay
+        </button>
+        
+        <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-top: 1rem;">
+          Tài khoản dùng thử cho BGK: Username: <code>giamkhao</code> | Pass: <code>123456</code>
+        </p>
+      </form>
+
+      <!-- FORM 2: ĐĂNG KÝ TÀI KHOẢN -->
+      <form id="register-form" style="display: none;" onsubmit="handleRegisterSubmit(event)">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="reg-username"><i class="fa-solid fa-at"></i> Username:</label>
+            <input type="text" id="reg-username" class="form-control" placeholder="VD: hocsinh123" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-password"><i class="fa-solid fa-lock"></i> Mật khẩu:</label>
+            <input type="password" id="reg-password" class="form-control" placeholder="Mật khẩu..." required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-fullname"><i class="fa-solid fa-id-card"></i> Họ và tên:</label>
+          <input type="text" id="reg-fullname" class="form-control" placeholder="VD: Nguyễn Văn A" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="reg-school"><i class="fa-solid fa-school"></i> Trường học:</label>
+            <input type="text" id="reg-school" class="form-control" placeholder="VD: THPT Chuyên KHKT">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-grade"><i class="fa-solid fa-graduation-cap"></i> Khối lớp:</label>
+            <input type="text" id="reg-grade" class="form-control" placeholder="VD: Lớp 11A1">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-role"><i class="fa-solid fa-user-gear"></i> Vai trò người dùng:</label>
+          <select id="reg-role" class="form-control">
+            <option value="student" selected>Học sinh (Student)</option>
+            <option value="jury">Ban Giám Khảo (Jury / Teacher)</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-accent" style="width: 100%; margin-top: 1rem;">
+          <i class="fa-solid fa-user-plus"></i> Đăng Ký Tài Khoản Supabase
+        </button>
+      </form>
+
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer>
     <div class="container">
@@ -493,11 +585,11 @@
         </div>
         <div style="text-align: right;">
           <p style="color: #e2e8f0; font-weight: 700;">Dự án Classroom App | Học viên: kieuthi14</p>
-          <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.25rem;">Xuất bản: 10/08/2026 | Supabase Realtime Edition</p>
+          <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.25rem;">Xuất bản: 10/08/2026 | Supabase Username Auth Edition</p>
         </div>
       </div>
       <div style="border-top: 1px solid var(--border-color); padding-top: 1.5rem; text-align: center; color: var(--text-dim); font-size: 0.8rem;">
-        © 2026 Debias AI Protocol. Tích hợp Supabase Realtime Listener cho BGK KHKT.
+        © 2026 Debias AI Protocol. Tích hợp Supabase Username Auth cho KHKT.
       </div>
     </div>
   </footer>
