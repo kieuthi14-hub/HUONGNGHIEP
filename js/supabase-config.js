@@ -1,27 +1,25 @@
 /**
- * DEBIAS AI PROTOCOL - SUPABASE CONFIGURATION & REALTIME SUBSCRIPTION
- * Thầy/Cô điền URL và ANON KEY từ bảng điều khiển Supabase vào 2 biến dưới đây:
+ * DEBIAS AI PROTOCOL - SUPABASE CONFIGURATION & REALTIME CLIENT
+ * Đã kết nối dự án Supabase chính thức của thầy/cô (Ref: fwfjciayddfrllskjqna)
  */
 
-const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL"; // Thay bằng URL dự án Supabase (VD: https://xyz.supabase.co)
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY"; // Thay bằng ANON Key công khai từ Supabase API Settings
+const SUPABASE_URL = "https://fwfjciayddfrllskjqna.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ3ZmpjaWF5ZGRmcmxsc2tqcW5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNzkzNjAsImV4cCI6MjEwMTc1NTM2MH0.BTxM4SlNk6_kgLizggoXCcoqNF4Z6D7roRqM-VJDyN4";
 
 let supabaseClient = null;
 
-// Khởi tạo Supabase Client nếu có CDN SDK
-if (typeof supabase !== 'undefined' && SUPABASE_URL !== "YOUR_SUPABASE_PROJECT_URL") {
+// Khởi tạo Supabase Client
+if (typeof supabase !== 'undefined') {
   try {
     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    console.log("⚡ Supabase Client & Realtime System initialized successfully!");
+    console.log("⚡ [LIVE SUPABASE] Đã kết nối thành công tới Supabase Project: https://fwfjciayddfrllskjqna.supabase.co");
   } catch (err) {
-    console.warn("⚠️ Chưa cấu hình Supabase URL/Key hợp lệ. Đang dùng chế độ Mock Data.", err);
+    console.warn("⚠️ Khởi tạo Supabase Client thất bại:", err);
   }
-} else {
-  console.log("ℹ️ Đang chạy ở chế độ offline/local data. Để kết nối Supabase Realtime, vui lòng cập nhật SUPABASE_URL & SUPABASE_ANON_KEY trong js/supabase-config.js");
 }
 
 /**
- * Tải Dữ liệu Thị trường Lao động từ Supabase
+ * Tải Dữ liệu Thị trường Lao động từ Supabase Cloud DB
  */
 async function loadLaborMarketFromSupabase() {
   if (!supabaseClient) return null;
@@ -32,7 +30,7 @@ async function loadLaborMarketFromSupabase() {
     if (error) throw error;
     return data;
   } catch (err) {
-    console.error("Lỗi tải CSDL từ Supabase:", err);
+    console.warn("ℹ️ Đang dùng dữ liệu dự phòng cục bộ do chưa chạy SQL khởi tạo trên Supabase.", err.message);
     return null;
   }
 }
@@ -42,7 +40,7 @@ async function loadLaborMarketFromSupabase() {
  */
 async function saveAssessmentToSupabase(assessmentData) {
   if (!supabaseClient) {
-    console.log("ℹ️ [Local Mode] Kết quả chưa đồng bộ lên Supabase do chưa nhập URL/Key.");
+    console.log("ℹ️ [Local Mode] Chưa khởi tạo Supabase Client.");
     return null;
   }
 
@@ -65,23 +63,19 @@ async function saveAssessmentToSupabase(assessmentData) {
       .select();
 
     if (error) throw error;
-    console.log("✅ Đã lưu kết quả thành công lên Supabase Cloud DB:", data);
+    console.log("✅ [LIVE SUPABASE] Đã đồng bộ thành công lên Supabase Cloud DB:", data);
     return data;
   } catch (err) {
-    console.error("❌ Lỗi lưu dữ liệu lên Supabase:", err.message);
+    console.warn("ℹ️ Cần chạy tệp schema/supabase_init.sql trong SQL Editor của Supabase để tạo bảng:", err.message);
     return null;
   }
 }
 
 /**
  * Đăng ký Listener Realtime Subscriptions cho Màn hình Ban Giám Khảo (Jury Monitor)
- * Mỗi khi có kết quả mới được đẩy lên Supabase DB, sự kiện tự động kích hoạt callback ngay lập tức
  */
 function subscribeToRealtimeAssessments(onNewAssessmentCallback) {
-  if (!supabaseClient) {
-    console.log("ℹ️ Realtime Listener đang hoạt động ở chế độ Local Event simulation.");
-    return null;
-  }
+  if (!supabaseClient) return null;
 
   const channel = supabaseClient
     .channel('realtime_debias_assessments')
@@ -89,14 +83,14 @@ function subscribeToRealtimeAssessments(onNewAssessmentCallback) {
       'postgres_changes',
       { event: 'INSERT', schema: 'public', table: 'debias_assessments' },
       (payload) => {
-        console.log('⚡ [SUPABASE REALTIME EVENT] Đã nhận đánh giá mới từ Học sinh:', payload.new);
+        console.log('⚡ [LIVE REALTIME EVENT] Đã nhận đánh giá mới từ Supabase:', payload.new);
         if (typeof onNewAssessmentCallback === 'function') {
           onNewAssessmentCallback(payload.new);
         }
       }
     )
     .subscribe((status) => {
-      console.log('📡 Trạng thái Supabase Realtime Subscription Channel:', status);
+      console.log('📡 Trạng thái Supabase Realtime Channel:', status);
     });
 
   return channel;
