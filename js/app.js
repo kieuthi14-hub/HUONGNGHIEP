@@ -1,6 +1,6 @@
 /**
  * DEBIAS AI PROTOCOL - MAIN APP CONTROLLER
- * Xử lý tương tác Giao diện, Điều phối Wizard & Ban Giám Khảo Sandbox
+ * Xử lý tương tác Giao diện, Điều phối Wizard, Supabase Sync & Ban Giám Khảo Sandbox
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -38,8 +38,8 @@ function initArchDiagramInteractivity() {
     'matrix-4quad': 'Module Ma Trận Phân Tư 4 Ô: Phân tích và cô lập Hiệu ứng đám đông (Bandwagon Effect).',
     'sunk-cost': 'Module Chi Phí Chìm: Tính toán chi phí cơ hội và cảnh báo bẫy tâm lý tiếc nguồn lực đã mất.',
     'market-service': 'Dịch vụ Tích hợp Thị trường: Kết nối API tra cứu thông tin tuyển dụng & xu hướng nghề nghiệp 5 năm.',
-    'user-db': 'Cơ sở Dữ liệu Người dùng (User DB): Lưu trữ phiên đánh giá, lịch sử tư duy và hồ sơ tiến bộ học sinh.',
-    'market-db': 'Kho Dữ liệu Thị trường Lao động: CSDL lưu trữ thông tin thực tế về tỉ lệ chọi, thu nhập, nguy cơ AI thay thế.'
+    'user-db': 'Cơ sở Dữ liệu Supabase Profiles: Lưu trữ hồ sơ học sinh, phiên đánh giá tư duy & quản lý phân quyền RLS.',
+    'market-db': 'Kho Dữ liệu Thị trường Supabase: CSDL Cloud lưu trữ thông tin thực tế về tỉ lệ chọi, thu nhập, nguy cơ AI thay thế.'
   };
 
   nodes.forEach(node => {
@@ -149,7 +149,7 @@ function renderDevilsQuestions(careerId) {
   container.innerHTML = html;
 }
 
-/* Compute and Display Final Scorecard (Bước 4: Báo cáo) */
+/* Compute and Display Final Scorecard & Save to Supabase */
 function calculateFinalResults() {
   const careerSelect = document.getElementById('career-select');
   const careerId = careerSelect ? careerSelect.value : 'it_software';
@@ -232,6 +232,27 @@ function calculateFinalResults() {
       </table>
     `;
   }
+
+  // Tự động đồng bộ kết quả lên Supabase Cloud DB
+  if (typeof saveAssessmentToSupabase === 'function') {
+    saveAssessmentToSupabase({
+      studentName: 'Học sinh KHKT',
+      careerCode: careerId,
+      confScore: confPoints,
+      availScore: availResult.biasPoints,
+      bandScore: bandwagonResult.bandwagonScore,
+      sunkScore: sunkResult.sunkCostPoints,
+      overallScore: final.score,
+      objectivityIndex: final.objectivityIndex,
+      classification: final.classification
+    }).then(res => {
+      const badge = document.getElementById('supabase-status-badge');
+      if (badge && res) {
+        badge.innerHTML = '⚡ Đã đồng bộ Supabase Cloud';
+        badge.style.color = '#38bdf8';
+      }
+    });
+  }
 }
 
 /* 4. Jury Sandbox Presets (Kịch bản dùng thử 1-Click cho Ban Giám Khảo) */
@@ -253,7 +274,6 @@ function loadJuryPresetCase(caseId) {
     document.getElementById('perceived-salary').value = 'very_high';
     document.getElementById('perceived-comp').value = 'easy';
     
-    // Check bandwagon influences
     document.querySelectorAll('.influence-checkbox').forEach(cb => {
       cb.checked = (cb.value === 'viral_tiktok' || cb.value === 'friends_choice');
     });
