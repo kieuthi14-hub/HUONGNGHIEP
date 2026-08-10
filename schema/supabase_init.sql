@@ -1,27 +1,27 @@
 -- ============================================================================
--- DEBIAS AI PROTOCOL - SUPABASE (POSTGRESQL) DATABASE INITIALIZATION
+-- DEBIAS AI PROTOCOL - SUPABASE (POSTGRESQL) DATABASE INITIALIZATION WITH AUTH
 -- Ngôn ngữ: PostgreSQL / Supabase SQL Editor
 -- Tác giả: Super Agent AI
 -- ============================================================================
 
--- Enable UUID Extension if not enabled
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- ----------------------------------------------------------------------------
--- 1. Bảng public.profiles (Lưu thông tin Học sinh & Giám khảo)
+-- 1. Bảng public.users_auth (Đăng ký & Đăng nhập bằng Username / Mật khẩu)
 -- ----------------------------------------------------------------------------
 DROP TABLE IF EXISTS public.bias_logs CASCADE;
 DROP TABLE IF EXISTS public.debias_assessments CASCADE;
 DROP TABLE IF EXISTS public.labor_market_repository CASCADE;
-DROP TABLE IF EXISTS public.profiles CASCADE;
+DROP TABLE IF EXISTS public.users_auth CASCADE;
 
-CREATE TABLE public.profiles (
+CREATE TABLE public.users_auth (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  username TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
   full_name TEXT NOT NULL,
-  email TEXT UNIQUE NOT NULL,
-  role TEXT DEFAULT 'student' CHECK (role IN ('student', 'jury', 'admin')),
   school_name TEXT,
   grade_level TEXT,
+  role TEXT DEFAULT 'student' CHECK (role IN ('student', 'jury', 'admin')),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -48,6 +48,8 @@ CREATE TABLE public.labor_market_repository (
 -- ----------------------------------------------------------------------------
 CREATE TABLE public.debias_assessments (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES public.users_auth(id) ON DELETE SET NULL,
+  username TEXT DEFAULT 'hocsinh_khkt',
   student_name TEXT DEFAULT 'Học sinh KHKT',
   career_code TEXT NOT NULL,
   confirmation_bias_score INT DEFAULT 0,
@@ -62,7 +64,7 @@ CREATE TABLE public.debias_assessments (
 );
 
 -- ----------------------------------------------------------------------------
--- 4. Bảng public.bias_logs (Chi tiết nhật ký phản biện từng câu hỏi)
+-- 4. Bảng public.bias_logs (Chi tiết nhật ký từng câu hỏi)
 -- ----------------------------------------------------------------------------
 CREATE TABLE public.bias_logs (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -76,30 +78,28 @@ CREATE TABLE public.bias_logs (
 );
 
 -- ============================================================================
--- CẤU HÌNH ROW LEVEL SECURITY (RLS) - BẢO MẬT & QUYỀN TRUY CẬP SUPABASE
+-- CẤU HÌNH ROW LEVEL SECURITY (RLS) SUPABASE
 -- ============================================================================
 
-ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.users_auth ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.labor_market_repository ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.debias_assessments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.bias_logs ENABLE ROW LEVEL SECURITY;
 
--- Cho phép đọc công khai (Public Read) cho mọi bảng
-CREATE POLICY "Public Read Profiles" ON public.profiles FOR SELECT USING (true);
+-- Policies cho users_auth
+CREATE POLICY "Public Select UsersAuth" ON public.users_auth FOR SELECT USING (true);
+CREATE POLICY "Public Insert UsersAuth" ON public.users_auth FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public Update UsersAuth" ON public.users_auth FOR UPDATE USING (true);
+
+-- Policies cho các bảng khác
 CREATE POLICY "Public Read Labor Data" ON public.labor_market_repository FOR SELECT USING (true);
 CREATE POLICY "Public Read Assessments" ON public.debias_assessments FOR SELECT USING (true);
 CREATE POLICY "Public Read Bias Logs" ON public.bias_logs FOR SELECT USING (true);
 
--- Cho phép ghi dữ liệu công khai (Public Insert) từ Web App
-CREATE POLICY "Public Insert Profiles" ON public.profiles FOR INSERT WITH CHECK (true);
 CREATE POLICY "Public Insert Assessments" ON public.debias_assessments FOR INSERT WITH CHECK (true);
 CREATE POLICY "Public Insert Bias Logs" ON public.bias_logs FOR INSERT WITH CHECK (true);
 
--- ============================================================================
--- CẤU HÌNH REALTIME LISTENER SUPABASE (ĐỒNG BỘ DỮ LIỆU THỜI GIAN THỰC FOR BGK)
--- ============================================================================
-
--- Bật Realtime Subscription cho bảng debias_assessments
+-- Bật Realtime Subscription cho Màn hình Ban Giám Khảo
 DO $$
 BEGIN
   IF EXISTS (SELECT 1 FROM pg_publication WHERE pubname = 'supabase_realtime') THEN
@@ -108,12 +108,15 @@ BEGIN
 END $$;
 
 -- ============================================================================
--- NẠP DỮ LIỆU MẪU (SEED DATA CHO SUPABASE)
+-- NẠP DỮ LIỆU TÀI KHOẢN MẪU & THỊ TRƯỜNG LAO ĐỘNG (SEED DATA)
 -- ============================================================================
 
-INSERT INTO public.profiles (full_name, email, role, school_name, grade_level) VALUES
-('Kiều Thị B', 'kieuthi14@khkt.edu.vn', 'student', 'THPT Chuyên KHKT', 'Lớp 11A1'),
-('Ban Giám Khảo KHKT', 'giamkhao@khkt.gov.vn', 'jury', 'Hội đồng Khoa học KHKT', 'Giám khảo Quốc gia');
+-- Tài khoản học sinh mẫu: username: kieuthi14 | pass: 123456
+-- Tài khoản giám khảo mẫu: username: giamkhao | pass: 123456
+INSERT INTO public.users_auth (username, password_hash, full_name, school_name, grade_level, role) VALUES
+('kieuthi14', '123456', 'Kiều Thị B', 'THPT Chuyên KHKT', 'Lớp 11A1', 'student'),
+('giamkhao', '123456', 'Ban Giám Khảo KHKT', 'Hội đồng Khoa học KHKT', 'Giám khảo Quốc gia', 'jury')
+ON CONFLICT (username) DO NOTHING;
 
 INSERT INTO public.labor_market_repository 
 (career_code, career_name, avg_salary_range, annual_growth_rate, competition_ratio, automation_risk_percent, common_myths, realities) 
@@ -128,4 +131,5 @@ VALUES
 
 ('business_marketing', 'Quản trị Kinh doanh & Marketing', '10 - 30 triệu VNĐ/tháng', '+10.5%', '1 : 15.0', 35, 
  '["Ra trường làm giám đốc ngay", "Chỉ cần quay video TikTok vui vẻ"]'::jsonb, 
- '["Áp lực KPI doanh số cực kỳ khắc nghiệt", "Cần kỹ năng phân tích dữ liệu chuyên sâu"]'::jsonb);
+ '["Áp lực KPI doanh số cực kỳ khắc nghiệt", "Cần kỹ năng phân tích dữ liệu chuyên sâu"]'::jsonb)
+ON CONFLICT (career_code) DO NOTHING;
